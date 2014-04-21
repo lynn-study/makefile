@@ -1,0 +1,119 @@
+.PHONY : all
+
+all : first second third
+        @echo "\$$@ = $@"
+        @echo "$$^ = $^"
+        @echo "$$< = $<"
+
+first second third :
+
+#========================================================
+
+all:
+        @echo "\$$@ = $@"
+        @echo "MAKECMDGOALS = ${MAKECMDGOALS}"
+
+
+#========================================================
+
+foo = ${bar}
+bar = ${ugh}
+ugh = haha
+
+all:
+        @echo "foo = ${foo}"
+
+
+#===========================================================
+foo = x
+foo ?= y
+
+bar ?= y
+
+all:
+	@echo "foo = ${foo} bar = ${bar}"
+#===========================================================
+obj = main.o foo.o
+obj := ${obj} another.o
+
+tmp = main.o foo.o
+tmp += another.o
+
+all:
+	@echo "obj = ${obj}"
+	@echo "tmp = ${tmp}"
+#===========================================================
+
+foo = a.c b.c c.c
+bar := $(foo:.c=.o)
+
+all:
+	@echo "bar = ${bar}"
+#===========================================================
+
+override foo = x
+
+all:
+	@echo "foo = ${foo}"
+#===========================================================
+
+ROOT := $(abspath ~/work)
+
+without_dir = foo.c bar.c main.o
+with_dir := $(addprefix objs/, $(without_dir))
+
+without_suffix = foo main bar
+with_suffix := $(addsuffix .c, $(without_suffix))
+
+all:
+	@echo "ROOT = ${ROOT}"
+	@echo "without_dir = $(without_dir)"
+	@echo "with_dir = $(with_dir)"
+	@echo "without_suffix = $(without_suffix)"
+	@echo "with_suffix = $(with_suffix)"
+#===========================================================
+.PHONY: all
+
+sources = foo.c bar.c baz.s head.h
+$(eval sources := $(filter %.c %.s, $(sources)))
+
+all:
+	@echo $(sources)
+#===========================================================
+.PHONY: all
+
+sources = foo.c bar.c baz.s head.h main1.c main2.c
+
+result = $(filter-out main%.c, $(sources))
+
+all:
+	@echo $(result)
+#===========================================================
+.PHONY: all
+
+file_name := $(notdir code/foo/foo.c code/bar/bar.c)
+
+all:
+	@echo $(file_name)
+#===========================================================
+.PHONY: all
+
+root := $(realpath ./../)
+
+all:
+	@echo $(root)
+#===========================================================
+.PHONY: all
+
+original = foo.c     main.c
+strip := $(strip $(original))
+
+all:
+	@echo $(original)
+#===========================================================
+.PHONY: all
+
+src := $(wildcard *.c)
+
+all:
+	@echo $(src)
