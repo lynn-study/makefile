@@ -114,6 +114,7 @@ all:
 .PHONY: all
 
 src := $(wildcard *.c)
+objects := $(patsubst %.c, %.o,$(wildcard *.c))
 
 all:
 	@echo $(src)
